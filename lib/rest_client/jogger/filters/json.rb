@@ -6,7 +6,7 @@ module RestClient
       private
 
         def filter_data(filter)
-          data.gsub! /"(#{filter})": ?"(.*[^\"])"/, "\"#{filter}\": \"#{filter_replacement}\""
+          data.gsub! /"#{filter}":\s*"[^"]*"/, %{"#{filter}": "#{filter_replacement}"}
         end
       end
     end
