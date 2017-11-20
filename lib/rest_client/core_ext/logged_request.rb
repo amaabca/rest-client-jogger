@@ -18,7 +18,7 @@ module LoggedRequest
     time = (Time.now - started).round(2)
     content_type = content_type_from_headers(opts[:headers])
     payload = filter(content_type).new(data: opts[:payload]).filter
-    opts[:headers].except!(:authorization) if opts[:headers]
+    opts[:headers].reject! { |k, _| k.to_s.casecmp('authorization').zero? } if opts[:headers]
     params = opts.except(:user, :password, :payload).merge(payload: payload)
     ActiveSupport::Notifications.instrument PATTERN,
       log_data(params, response, exception, time)
