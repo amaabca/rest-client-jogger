@@ -7,9 +7,12 @@ describe RestClient::Request do
 
       before(:each) do
         @was_called = false
+        @payload = nil
         Rails.configuration.filter_parameters = [:user, :password]
         ActiveSupport::Notifications.unsubscribe(pattern)
+
         ActiveSupport::Notifications.subscribe(pattern) do |*payload|
+          @payload = payload
           @was_called = true
           subscription.call payload.last
         end
@@ -27,15 +30,20 @@ describe RestClient::Request do
 
         before(:each) do
           WebMock.stub_request(:any, url).to_return(body: response, status: status)
-        end
-
-        it 'notifies any subscribers' do
           RestClient::Request.logged_request(
             method: :get,
             payload: 'payload',
-            url: url
+            url: url,
+            headers: { authorization: 'some bearer token', accept: 'json' }
           )
+        end
+
+        it 'notifies any subscribers' do
           expect(@was_called).to be true
+        end
+
+        it 'strips authorization header' do
+          expect(@payload.last[:request][:headers]).to eq ({ accept: 'json' })
         end
       end
 
@@ -65,7 +73,7 @@ describe RestClient::Request do
       context 'HTTP Timeout' do
         let(:subscription) do
           -> (payload) {
-            expect(payload[:exception]).to eq('RestClient::Exceptions::ReadTimeout')
+            expect(payload[:exception]).to eq('RestClient::Exceptions::OpenTimeout')
             expect(payload[:response]).to be nil
             expect(payload[:time_elapsed]).to be_a Float
           }
@@ -77,7 +85,7 @@ describe RestClient::Request do
 
         it 'notifies subscribers, specifies exception class and has nil response' do
           exec = -> { RestClient::Request.logged_request(method: :get, payload: 'payload', url: url) }
-          expect { exec.call }.to raise_error(RestClient::Exceptions::ReadTimeout)
+          expect { exec.call }.to raise_error(RestClient::Exceptions::OpenTimeout)
           expect(@was_called).to be true
         end
       end
