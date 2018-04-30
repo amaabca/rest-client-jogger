@@ -38,7 +38,7 @@ module LoggedRequest
     if response
       {
         code: response.code,
-        headers: response.headers,
+        headers: response.headers.reject { |k, _| k.to_s.casecmp('authorization').zero? },
         body: response.body.to_s.force_encoding('UTF-8')
       }
     end
