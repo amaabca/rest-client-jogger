@@ -19,6 +19,7 @@ describe RestClient::Request do
       end
 
       context 'HTTP 200' do
+        let(:headers) { { authorization: 'some bearer token', accept: 'json' } }
         let(:status) { 200 }
         let(:subscription) do
           -> (payload) {
@@ -29,12 +30,12 @@ describe RestClient::Request do
         end
 
         before(:each) do
-          WebMock.stub_request(:any, url).to_return(body: response, status: status)
+          WebMock.stub_request(:any, url).to_return(body: response, status: status, headers: headers)
           RestClient::Request.logged_request(
             method: :get,
             payload: 'payload',
             url: url,
-            headers: { authorization: 'some bearer token', accept: 'json' }
+            headers: headers
           )
         end
 
@@ -44,6 +45,10 @@ describe RestClient::Request do
 
         it 'strips authorization header' do
           expect(@payload.last[:request][:headers]).to eq ({ accept: 'json' })
+        end
+
+        it 'strips authorization header in the responses' do
+          expect(@payload.last[:response][:headers]).to eq ({ accept: 'json' })
         end
       end
 
