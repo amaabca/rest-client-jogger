@@ -7,14 +7,18 @@ module RestClient
         @logger ||= ActiveSupport::Logger.new('log/rest_client.log').tap { |l| l.level = Logger::DEBUG }
       end
 
-      def pattern
-        LoggedRequest::PATTERN
+      def request_pattern
+        LoggedRequest::REQUEST_PATTERN
+      end
+
+      def response_pattern
+        LoggedRequest::RESPONSE_PATTERN
       end
 
       def subscribe
-        ActiveSupport::Notifications.subscribe pattern, RequestComplete.new(logger: logger)
+        ActiveSupport::Notifications.subscribe request_pattern, RequestComplete.new(logger: logger)
+        ActiveSupport::Notifications.subscribe response_pattern, RequestComplete.new(logger: logger)
       end
-
     end
   end
 end

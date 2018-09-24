@@ -22,13 +22,13 @@ describe RestClient::Jogger::RequestComplete do
   end
 
   describe "#call" do
-    let(:payload) { { exception: "", payload: { method: "post", url: "https://example.com/waffles.json" } } }
+    let(:payload) { { exception: "", method: "post", url: "https://example.com/waffles.json" } }
     let(:timestamp) { Time.now }
 
     context "without errors" do
       before(:each) do
         f = File.open(logger_path, "w") and f.close
-        completer.call "rest_client.request", timestamp, timestamp, "9c122712f744339c29e7", payload
+        completer.call "rest_client.response", timestamp, timestamp, "9c122712f744339c29e7", payload
       end
 
       it "logs the payload as JSON" do
@@ -47,7 +47,5 @@ describe RestClient::Jogger::RequestComplete do
         completer.call "rest_client.request", timestamp, timestamp, "9c122712f744339c29e7", payload
       end
     end
-
   end
-
 end
