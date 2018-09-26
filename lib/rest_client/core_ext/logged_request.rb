@@ -1,5 +1,6 @@
 module LoggedRequest
-  PATTERN = 'rest_client.request'.freeze
+  REQUEST_PATTERN = 'rest_client.request'.freeze
+  RESPONSE_PATTERN = 'rest_client.response'.freeze
   DEFAULT_CONTENT_TYPE = 'application/json'.freeze
 
   def logged_request(opts = {}, &block)
@@ -9,29 +10,40 @@ module LoggedRequest
     # are accessed.
     response, exception = nil, nil
     started = Time.now
+    ActiveSupport::Notifications.instrument REQUEST_PATTERN,
+      log_request(opts)
+    require "pry"; binding.pry
     response = execute(opts, &block)
-  rescue StandardError => ex
+  rescue StandardError, RestClient::Exception => ex
+    require "pry"; binding.pry
     exception = ex.class.to_s
     response = ex.respond_to?(:response) && ex.response
     raise ex # Re-raise the exception, we just wanted to capture it
   ensure
+    require "pry"; binding.pry
     time = (Time.now - started).round(2)
-    content_type = content_type_from_headers(opts[:headers])
-    payload = filter(content_type).new(data: opts[:payload]).filter
-    opts[:headers].reject! { |k, _| k.to_s.casecmp('authorization').zero? } if opts[:headers]
-    params = opts.except(:user, :password, :payload).merge(payload: payload)
-    ActiveSupport::Notifications.instrument PATTERN,
-      log_data(params, response, exception, time)
+    ActiveSupport::Notifications.instrument RESPONSE_PATTERN,
+      log_response(response, exception, time)
   end
 
   private
 
-  def log_data(params, response, exception, time)
-    request_data(params).merge(
+  def log_request(opts)
+    content_type = content_type_from_headers(opts[:headers])
+    payload = filter(content_type).new(data: opts[:payload]).filter
+    opts[:headers].reject! { |k, _| k.to_s.casecmp('authorization').zero? } if opts[:headers]
+    params = opts.except(:user, :password, :payload).merge(payload: payload)
+    {
+      request: params
+    }
+  end
+
+  def log_response(response, exception, time)
+    {
       response: response_data(response),
       exception: exception,
       time_elapsed: time
-    )
+    }
   end
 
   def response_data(response = nil)
@@ -42,12 +54,6 @@ module LoggedRequest
         body: response.body.to_s.force_encoding('UTF-8')
       }
     end
-  end
-
-  def request_data(params)
-    {
-      request: params
-    }
   end
 
   def filter(content_type)
