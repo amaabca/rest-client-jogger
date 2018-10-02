@@ -17,7 +17,7 @@ module RestClient
         message = ::JSON.dump(payload.merge(event_name: name, event_id: id, timestamp: start))
         name =~ /error/ ? logger.error(message) : logger.debug(message)
       rescue StandardError => e
-        notifier.error e, payload: payload
+        notifier.warning e, payload: payload
       end
 
     end

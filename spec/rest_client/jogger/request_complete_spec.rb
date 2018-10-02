@@ -43,7 +43,7 @@ describe RestClient::Jogger::RequestComplete do
     context "logger is invalid" do
       it "notifies" do
         completer.logger = {}
-        expect(completer.notifier).to receive :error
+        expect(completer.notifier).to receive :warning
         completer.call "rest_client.request", timestamp, timestamp, "9c122712f744339c29e7", payload
       end
     end
