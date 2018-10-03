@@ -51,7 +51,7 @@ module RestClient
       def stringify_details(rendered_payload)
         parsed_json_render = JSON.parse(rendered_payload)
         parsed_json_render["details"] = parsed_json_render["details"].to_json
-        parsed_json_render.to_s
+        parsed_json_render.to_json
       end
     end
   end

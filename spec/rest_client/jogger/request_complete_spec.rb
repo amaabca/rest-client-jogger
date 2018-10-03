@@ -32,11 +32,11 @@ describe RestClient::Jogger::RequestComplete do
       end
 
       it "logs the payload as JSON" do
-        expect(File.read(logger_path)).to include(payload[:exception].to_json, payload[:method].to_json,payload[:url].to_json)
+        expect(File.read(logger_path)).to include_json payload
       end
 
       it "logs event start time as a Loggly parseable timestamp" do
-        expect(File.read(logger_path)).to include (timestamp.to_json)
+        expect(File.read(logger_path)).to include_json(timestamp: timestamp.to_s)
       end
     end
 
