@@ -22,7 +22,7 @@ module RestClient
           ip_address: ip_address
         }
         json_render = template(name).render nil, render_params
-
+        json_render = stringify_details(json_render)
         name =~ /error/ ? logger.error(json_render) : logger.debug(json_render)
       rescue StandardError => e
         notifier.error e, payload: payload
@@ -46,6 +46,12 @@ module RestClient
 
       def ip_address
         Socket.ip_address_list.detect(&:ipv4_private?).ip_address if Socket.ip_address_list.detect(&:ipv4_private?)
+      end
+
+      def stringify_details(rendered_payload)
+        parsed_json_render = JSON.parse(rendered_payload)
+        parsed_json_render["details"] = parsed_json_render["details"].to_json
+        parsed_json_render.to_s
       end
     end
   end
