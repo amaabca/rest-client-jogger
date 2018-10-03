@@ -3,7 +3,7 @@ json.url args[:url]
 json.method args[:method]
 json.verify_ssl args[:verify_ssl]
 
-json.headers do
+json.bread do
   json.dateTime Time.now
   json.executionTime Time.now
   json.action 'request'
@@ -13,7 +13,7 @@ json.body do
   json.payload args[:payload]
 end
 json.sourceIp ip_address
-json.details do
+json.cheese do
   json.eventName LoggedRequest::REQUEST_PATTERN
   json.eventId event_id
   json.timeElapsed (Time.now - args[:started])
