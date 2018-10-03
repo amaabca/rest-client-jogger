@@ -18,7 +18,7 @@ json.details do
   json.eventId event_id
   json.timeElapsed (Time.now - args[:started])
   json.openTimeout args[:open_timeout]
-  json.readTimeout args[:timeout]
+  json.readTimeout args[:timeout] || args[:read_timeout]
 end
 
 json.timestamp timestamp
