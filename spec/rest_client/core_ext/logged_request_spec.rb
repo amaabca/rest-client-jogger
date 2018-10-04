@@ -32,15 +32,16 @@ describe RestClient::Request do
         let(:status) { 200 }
         let(:response_subscription) do
           -> (payload) {
-            expect(payload[:payload]).to eq(response)
-            expect(payload[:headers]).to be_a Hash
-            expect(payload[:time_elapsed]).to be_a Float
+            expect(payload[:response].body).to eq(response)
+            expect(payload[:response].headers).to be_a Hash
+            expect(payload[:start_time]).to be_a Time
           }
         end
         let(:request_subscription) do
           -> (request) {
             expect(request[:payload]).to eq("payload")
             expect(request[:headers]).to be_a Hash
+            expect(request[:start_time]).to be_a Time
           }
         end
 
@@ -81,11 +82,11 @@ describe RestClient::Request do
 
          let(:response_subscription) do
           -> (payload) {
-            expect(payload[:payload]).to eq(response)
+            expect(payload[:response].body).to eq(response)
             expect(payload[:exception]).to eq('RestClient::BadRequest')
-            expect(payload[:code]).to eq(400)
-            expect(payload[:headers]).to be_a Hash
-            expect(payload[:time_elapsed]).to be_a Float
+            expect(payload[:response].code).to eq(400)
+            expect(payload[:response].headers).to be_a Hash
+            expect(payload[:start_time]).to be_a Time
           }
         end
         let(:request_subscription) do
@@ -111,8 +112,8 @@ describe RestClient::Request do
         let(:response_subscription) do
           -> (payload) {
             expect(payload[:exception]).to eq('RestClient::Exceptions::OpenTimeout')
-            expect(payload[:response]).to be nil
-            expect(payload[:time_elapsed]).to be_a Float
+            expect(payload[:response]).to be_nil
+            expect(payload[:start_time]).to be_a Time
           }
         end
 
@@ -140,7 +141,7 @@ describe RestClient::Request do
           -> (payload) {
             expect(payload[:exception]).to eq('ArgumentError')
             expect(payload[:response]).to be nil
-            expect(payload[:time_elapsed]).to be_a Float
+            expect(payload[:start_time]).to be_a Time
           }
         end
 

@@ -16,8 +16,8 @@ module RestClient
       end
 
       def subscribe
-        ActiveSupport::Notifications.subscribe request_pattern, RequestComplete.new(logger: logger)
-        ActiveSupport::Notifications.subscribe response_pattern, RequestComplete.new(logger: logger)
+        ActiveSupport::Notifications.subscribe request_pattern, Request.new(logger: logger)
+        ActiveSupport::Notifications.subscribe response_pattern, Response.new(logger: logger)
       end
     end
   end
