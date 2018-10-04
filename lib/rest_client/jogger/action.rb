@@ -39,7 +39,7 @@ module RestClient
       private
 
       def filter(opts = {})
-        filter_class(opts[:headers]).new(data: opts[:payload].to_s).filter
+        filter_class(opts[:headers] || {}).new(data: opts[:payload].to_s).filter
       end
 
       def filter_class(headers = {})
