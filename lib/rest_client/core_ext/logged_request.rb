@@ -14,36 +14,33 @@ module LoggedRequest
     response = execute(opts, &block)
   rescue StandardError => ex
     exception = ex.class.to_s
-    response = ex.respond_to?(:response) && ex.response
+    response = ex.respond_to?(:response) ? ex.response : nil
     raise ex # Re-raise the exception, we just wanted to capture it
   ensure
-    time_elapsed = (Time.now - started).round(2)
-    opts[:exception] = exception
-    logged_response = opts.merge({ time_elapsed: time_elapsed })
-    logged_response = logged_response.deep_merge(response_data(response)) if response_data(response)
-    ActiveSupport::Notifications.instrument RESPONSE_PATTERN, strip_authorization(logged_response)
+    logged_response = opts.merge(exception: exception, response: response)
+    ActiveSupport::Notifications.instrument(
+      RESPONSE_PATTERN,
+      log_payload(logged_response, started)
+    )
   end
 
   private
 
-  def response_data(response = nil)
-    if response
-      {
-        code: response.code,
-        payload: response.body.to_s.force_encoding('UTF-8'),
-      }
-    end
+  def log_payload(params, started)
+    params.merge(
+      headers: filtered_headers(params),
+      start_time: started
+    )
   end
 
-  def strip_authorization(params)
-    new_params = params.clone
-    if new_params[:headers]
-      new_params.merge!({ headers: new_params[:headers].reject { |k, _| k.to_s.casecmp('authorization').zero? }})
-    end
-    new_params
+  def filtered_headers(opts)
+    opts.fetch(:headers, {}).reject { |k, _| k.to_s.casecmp('authorization').zero? }
   end
 
   def log_request(opts, started)
-    ActiveSupport::Notifications.instrument REQUEST_PATTERN, strip_authorization(opts).merge({ started: started})
+    ActiveSupport::Notifications.instrument(
+      REQUEST_PATTERN,
+      log_payload(opts, started)
+    )
   end
 end

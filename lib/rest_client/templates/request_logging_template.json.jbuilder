@@ -1,24 +1,17 @@
 # frozen_string_literal: true
 json.url args[:url]
 json.method args[:method]
-json.verify_ssl args[:verify_ssl]
-
-json.headers do
-  json.dateTime Time.now
-  json.executionTime Time.now
-  json.action 'request'
-  json.merge! args[:headers]
-end
+json.verify_ssl verify_ssl
+json.headers args.fetch(:headers, {})
 json.body do
-  json.payload args[:payload]
+  json.payload payload
 end
 json.sourceIp ip_address
 json.details do
   json.eventName LoggedRequest::REQUEST_PATTERN
   json.eventId event_id
-  json.timeElapsed (Time.now - args[:started])
-  json.openTimeout args[:open_timeout]
-  json.readTimeout args[:timeout] || args[:read_timeout]
+  json.timeElapsed time_elapsed
+  json.openTimeout open_timeout
+  json.readTimeout read_timeout
 end
-
-json.timestamp timestamp
+json.timestamp timestamp.iso8601

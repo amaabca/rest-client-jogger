@@ -43,7 +43,7 @@ module RestClient
       private
 
         def filter_parameters
-          defined?(Rails) ? Rails.configuration.filter_parameters : []
+          Rails.configuration.filter_parameters || []
         end
 
         def filter_data(filter)
