@@ -1,6 +1,5 @@
 require "json"
 require "mime/types"
-require "openssl"
 require "active_model"
 require "active_support/all"
 require "rollbar"
