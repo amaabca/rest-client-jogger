@@ -18,7 +18,7 @@ module RestClient
         render_params = {
           args: payload,
           payload: filter(payload),
-          verify_ssl: payload[:verify_ssl] != OpenSSL::SSL::VERIFY_NONE,
+          verify_ssl: OpenSSL::SSL::VERIFY_NONE,
           read_timeout: payload.fetch(:timeout) { payload[:read_timeout] },
           open_timeout: payload.fetch(:timeout) { payload[:open_timeout] },
           event_id: id,
