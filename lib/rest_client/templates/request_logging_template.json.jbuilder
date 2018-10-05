@@ -4,14 +4,12 @@ json.method args[:method]
 json.verify_ssl verify_ssl
 json.headers args.fetch(:headers, {})
 json.body do
-  json.payload payload
+  json.request payload
 end
 json.sourceIp ip_address
-json.details do
-  json.eventName LoggedRequest::REQUEST_PATTERN
-  json.eventId event_id
-  json.timeElapsed time_elapsed
-  json.openTimeout open_timeout
-  json.readTimeout read_timeout
-end
+json.eventName LoggedRequest::REQUEST_PATTERN
+json.eventId event_id
+json.timeElapsed time_elapsed
+json.openTimeout open_timeout
+json.readTimeout read_timeout
 json.timestamp timestamp.iso8601
