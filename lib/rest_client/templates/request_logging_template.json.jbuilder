@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+json.ignore_nil!
 json.url args[:url]
 json.method args[:method]
 json.verifySsl verify_ssl

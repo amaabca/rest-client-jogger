@@ -33,6 +33,11 @@ describe RestClient::Jogger::Filters::Json do
       it 'returns a string' do
         expect(filter).to be_a String
       end
+
+      it 'does not modify the original input' do
+        filter
+        expect(json).not_to include(replacement)
+      end
     end
 
     context 'with invalid json' do
