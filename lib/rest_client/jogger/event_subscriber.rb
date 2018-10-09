@@ -8,11 +8,11 @@ module RestClient
       end
 
       def request_pattern
-        LoggedRequest::REQUEST_PATTERN
+        RestClient::Jogger.request_pattern
       end
 
       def response_pattern
-        LoggedRequest::RESPONSE_PATTERN
+        RestClient::Jogger.response_pattern
       end
 
       def subscribe

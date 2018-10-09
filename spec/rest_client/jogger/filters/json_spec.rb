@@ -3,7 +3,7 @@ describe RestClient::Jogger::Filters::Json do
 
   describe '#filter' do
     let(:filter_params) { [:user, :password] }
-    let(:replacement) { RestClient::Jogger::Filters::Base::DEFAULT_REPLACEMENT }
+    let(:replacement) { RestClient::Jogger.default_filter_replacement }
     let(:filter) { described_class.new(data: json).filter }
     let(:parsed) { JSON.parse(filter) }
 

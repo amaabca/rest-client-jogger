@@ -3,8 +3,8 @@ describe RestClient::Request do
     describe '.logged_request' do
       let(:url) { 'http://example.com' }
       let(:response) { 'hello, world!' }
-      let(:request_pattern) { described_class::REQUEST_PATTERN }
-      let(:response_pattern) { described_class::RESPONSE_PATTERN }
+      let(:request_pattern) { RestClient::Jogger.request_pattern }
+      let(:response_pattern) { RestClient::Jogger.response_pattern }
 
       before(:each) do
         @was_called = false

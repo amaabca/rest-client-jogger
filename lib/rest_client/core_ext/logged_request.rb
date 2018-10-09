@@ -1,8 +1,4 @@
 module LoggedRequest
-  REQUEST_PATTERN = 'rest_client.request'.freeze
-  RESPONSE_PATTERN = 'rest_client.response'.freeze
-  DEFAULT_CONTENT_TYPE = 'application/json'.freeze
-
   def logged_request(opts = {}, &block)
     # We intend on using the following variables in this method's
     # ensure block. This means that we must take care to ensure
@@ -19,7 +15,7 @@ module LoggedRequest
   ensure
     logged_response = opts.merge(exception: exception, response: response)
     ActiveSupport::Notifications.instrument(
-      RESPONSE_PATTERN,
+      RestClient::Jogger.response_pattern,
       log_payload(logged_response, started)
     )
   end
@@ -39,7 +35,7 @@ module LoggedRequest
 
   def log_request(opts, started)
     ActiveSupport::Notifications.instrument(
-      REQUEST_PATTERN,
+      RestClient::Jogger.request_pattern,
       log_payload(opts, started)
     )
   end

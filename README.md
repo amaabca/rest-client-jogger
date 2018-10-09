@@ -35,6 +35,20 @@ RestClient::Jogger::EventSubscriber.new.subscribe
 
 This will log all requests made with the `logged_request` method to a logfile in `log/rest_client.log`.
 
+## Configuration
+
+Some of the parameters used in this gem can be configured in the host application:
+
+```ruby
+# in an initializer somewhere
+RestClient::Jogger.configure do |config|
+  config.request_pattern = 'my.request'            # optional
+  config.response_pattern = 'my.response'          # optional
+  config.default_content_type = 'application/json' # optional
+  config.default_filter_replacement = '[SECRET]'   # optional
+end
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

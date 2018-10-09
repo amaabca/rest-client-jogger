@@ -2,8 +2,6 @@ module RestClient
   module Jogger
     module Filters
       class Base
-        DEFAULT_REPLACEMENT = '[FILTERED]'.freeze
-
         include ActiveModel::Model
 
         attr_accessor :data, :content_type, :filters, :filter_replacement
@@ -34,7 +32,7 @@ module RestClient
         end
 
         def filter_replacement
-          @filter_replacement ||= DEFAULT_REPLACEMENT
+          @filter_replacement ||= RestClient::Jogger.default_filter_replacement
         end
 
         def filters
@@ -42,7 +40,7 @@ module RestClient
         end
 
         def content_type
-          @content_type ||= 'application/json'
+          @content_type ||= RestClient::Jogger.default_content_type
         end
 
       private

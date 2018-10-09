@@ -9,7 +9,7 @@ json.responseHeaders args[:response].try(:headers)
 json.requestBody payload
 json.responseBody args[:response].try(:body).to_s.force_encoding('UTF-8')
 json.sourceIp ip_address
-json.eventName LoggedRequest::RESPONSE_PATTERN
+json.eventName RestClient::Jogger.response_pattern
 json.eventId event_id
 json.timeElapsed time_elapsed
 json.openTimeout open_timeout
