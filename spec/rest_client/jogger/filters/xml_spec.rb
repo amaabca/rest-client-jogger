@@ -3,7 +3,7 @@ describe RestClient::Jogger::Filters::Xml do
 
   describe '#filter' do
     let(:filter_params) { [:user, :password] }
-    let(:replacement) { RestClient::Jogger::Filters::Base::DEFAULT_REPLACEMENT }
+    let(:replacement) { RestClient::Jogger.default_filter_replacement }
     let(:filter) { described_class.new(data: xml).filter }
     let(:document) { Nokogiri::XML(filter) }
 
@@ -31,6 +31,11 @@ describe RestClient::Jogger::Filters::Xml do
 
       it 'returns a string' do
         expect(filter).to be_a String
+      end
+
+      it 'does not modify the original input' do
+        filter
+        expect(xml).not_to include(replacement)
       end
     end
 
