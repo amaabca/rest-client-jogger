@@ -17,6 +17,11 @@ module RestClient
           end
         end
 
+        def initialize(opts = {})
+          super
+          self.data = data.dup
+        end
+
         def filter
           filters.each do |filter|
             filter_data filter
