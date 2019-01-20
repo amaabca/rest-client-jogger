@@ -9,6 +9,8 @@ module RestClient
         response_pattern
         default_content_type
         default_filter_replacement
+        log_output
+        filter_parameters
       ).freeze
       ATTRIBUTES = (REQUIRED_ATTRIBUTES | OPTIONAL_ATTRIBUTES).freeze
 
@@ -28,6 +30,14 @@ module RestClient
 
       def default_filter_replacement
         @default_filter_replacement || '[FILTERED]'
+      end
+
+      def log_output
+        @log_output || 'log/rest_client.log'
+      end
+
+      def filter_parameters
+        @filter_parameters || []
       end
     end
   end

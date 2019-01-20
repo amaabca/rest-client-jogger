@@ -46,6 +46,8 @@ RestClient::Jogger.configure do |config|
   config.response_pattern = 'my.response'          # optional
   config.default_content_type = 'application/json' # optional
   config.default_filter_replacement = '[SECRET]'   # optional
+  config.log_output = STDOUT                       # optional
+  config.filter_parameters = [:param_name]         # optional
 end
 ```
 
