@@ -11,5 +11,19 @@ describe RestClient::Jogger do
         expect(config).to be_a(RestClient::Jogger::Configuration)
       end
     end
+
+    context 'filter parameters config' do
+      let(:filters) { [:password] }
+
+      before(:each) do
+        described_class.configure do |config|
+          config.filter_parameters = filters
+        end
+      end
+
+      it 'set the filters' do
+        expect(RestClient::Jogger.filter_parameters).to include :password
+      end
+    end
   end
 end

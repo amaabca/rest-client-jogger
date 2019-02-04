@@ -4,7 +4,7 @@ module RestClient
       attr_accessor :logger
 
       def logger
-        @logger ||= ActiveSupport::Logger.new('log/rest_client.log').tap { |l| l.level = Logger::DEBUG }
+        @logger ||= ActiveSupport::Logger.new(RestClient::Jogger.log_output).tap { |l| l.level = Logger::DEBUG }
       end
 
       def request_pattern
