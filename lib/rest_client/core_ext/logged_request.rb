@@ -30,7 +30,7 @@ module LoggedRequest
   end
 
   def filtered_headers(opts)
-    opts.fetch(:headers, {}).reject { |k, _| k.to_s.casecmp('authorization').zero? }
+    opts.fetch(:headers, {}).reject { |k, _| k.to_s.casecmp('authorization').zero? || k.to_s.casecmp('x-api-key').zero? }
   end
 
   def log_request(opts, started)
