@@ -14,19 +14,8 @@ module RestClient
       end
 
       def call(name, start, finish, id, payload)
-        start_time = payload.fetch(:start_time)
-        render_params = {
-          args: payload,
-          payload: filter(payload),
-          verify_ssl: payload[:verify_ssl],
-          read_timeout: payload.fetch(:timeout) { payload[:read_timeout] },
-          open_timeout: payload.fetch(:timeout) { payload[:open_timeout] },
-          event_id: id,
-          timestamp: start,
-          time_elapsed: (finish - start_time).round(10),
-          ip_address: ip_address
-        }
-        json = template.render nil, render_params
+        params = render_params(start, finish, id, payload)
+        json = template.render(nil, params)
         name =~ /error/ ? logger.error(json) : logger.debug(json)
       rescue StandardError => e
         notifier.error e, payload: payload
@@ -38,8 +27,27 @@ module RestClient
 
       private
 
+      def render_params(start, finish, id, opts)
+        start_time = opts.fetch(:start_time)
+        url = opts.fetch(:url)
+        headers = opts.fetch(:headers) { {} }
+        {
+          method: opts[:method],
+          headers: headers,
+          url: RestClient::Jogger::Filters::QueryParameters.new(data: url).filter,
+          payload: filter(body: opts[:payload], headers: headers),
+          verify_ssl: opts[:verify_ssl],
+          read_timeout: opts.fetch(:timeout) { opts[:read_timeout] },
+          open_timeout: opts.fetch(:timeout) { opts[:open_timeout] },
+          event_id: id,
+          timestamp: start,
+          time_elapsed: (finish - start_time).round(10),
+          ip_address: ip_address
+        }
+      end
+
       def filter(opts = {})
-        filter_class(opts[:headers] || {}).new(data: opts[:payload].to_s).filter
+        filter_class(opts.fetch(:headers)).new(data: opts[:body].to_s).filter
       end
 
       def filter_class(headers = {})

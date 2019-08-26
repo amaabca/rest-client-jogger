@@ -1,9 +1,9 @@
 module RestClient
   module Jogger
     module Filters
-      class Json < RestClient::Jogger::Filters::Base
+      class Json < Base
 
-      private
+        private
 
         def filter_data(filter)
           data.gsub! /"#{filter}":\s*"[^"]*"/, %{"#{filter}": "#{filter_replacement}"}

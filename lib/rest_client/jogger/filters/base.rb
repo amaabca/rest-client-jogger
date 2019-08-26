@@ -43,7 +43,7 @@ module RestClient
           @content_type ||= RestClient::Jogger.default_content_type
         end
 
-      private
+        private
 
         def filter_parameters
           defined?(Rails) ? Rails.configuration.filter_parameters : RestClient::Jogger.filter_parameters

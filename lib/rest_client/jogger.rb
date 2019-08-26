@@ -1,4 +1,6 @@
+require 'cgi'
 require 'json'
+require 'uri'
 require 'mime/types'
 require 'active_model'
 require 'active_support/all'
@@ -11,16 +13,19 @@ require 'rest_client/jogger/action'
 require 'rest_client/jogger/request'
 require 'rest_client/jogger/response'
 require 'rest_client/jogger/filters/base'
+require 'rest_client/jogger/filters/headers'
 require 'rest_client/jogger/filters/json'
 require 'rest_client/jogger/filters/xml'
+require 'rest_client/jogger/filters/query_parameters'
 require 'rest_client/core_ext/logged_request'
 
 module RestClient
   class Request
     extend LoggedRequest
   end
-  
+
   module Jogger
+    AGENT_VERSION = "rest-client-jogger:#{VERSION}".freeze
     ROOT_PATH = File.expand_path(File.dirname(__FILE__)).freeze
 
     class << self
