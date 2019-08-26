@@ -15,8 +15,11 @@ module RestClient
 
       def call(name, start, finish, id, payload)
         start_time = payload.fetch(:start_time)
+        url = payload.fetch(:url)
+
         render_params = {
           args: payload,
+          url: RestClient::Jogger::Filters::QueryParameter.new(url: url).filter,
           payload: filter(payload),
           verify_ssl: payload[:verify_ssl],
           read_timeout: payload.fetch(:timeout) { payload[:read_timeout] },
@@ -39,7 +42,10 @@ module RestClient
       private
 
       def filter(opts = {})
-        filter_class(opts[:headers] || {}).new(data: opts[:payload].to_s).filter
+        headers = opts[:headers] || {}
+        filter_class(headers)
+          .new(data: opts[:payload].to_s)
+          .filter
       end
 
       def filter_class(headers = {})

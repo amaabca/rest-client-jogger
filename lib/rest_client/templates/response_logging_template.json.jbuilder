@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 json.ignore_nil!
 json.exception args[:exception]
-json.url args[:url]
+json.url url
 json.method args[:method]
 json.verifySsl verify_ssl
 json.requestHeaders args.fetch(:headers, {})
