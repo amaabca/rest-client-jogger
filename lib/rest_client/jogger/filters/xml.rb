@@ -1,9 +1,9 @@
 module RestClient
   module Jogger
     module Filters
-      class Xml < RestClient::Jogger::Filters::Base
+      class Xml < Base
 
-      private
+        private
 
         def filter_data(filter)
           data.gsub! /<#{filter}>(.*)<\/#{filter}>/, %{<#{filter}>#{filter_replacement}</#{filter}>}

@@ -30,7 +30,8 @@ module LoggedRequest
   end
 
   def filtered_headers(opts)
-    opts.fetch(:headers, {}).reject { |k, _| k.to_s.casecmp('authorization').zero? }
+    headers = opts.fetch(:headers) { {} }
+    RestClient::Jogger::Filters::Headers.new(data: headers).filter
   end
 
   def log_request(opts, started)

@@ -60,18 +60,14 @@ describe RestClient::Request do
             expect(@was_called).to be true
           end
 
-          it 'strips authorization header' do
-            expect(@request.last[:headers]).to eq ({ accept: 'json' })
+          it 'filters the authorization header' do
+            expect(@request.last[:headers][:authorization]).to eq('[FILTERED]')
           end
         end
 
         context 'response' do
           it 'notifies any subscribers' do
             expect(@was_called).to be true
-          end
-
-          it 'strips authorization header in the responses' do
-            expect(@payload.last[:headers]).to eq ({ accept: 'json' })
           end
         end
       end

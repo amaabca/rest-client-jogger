@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 json.ignore_nil!
-json.exception args[:exception]
-json.url args[:url]
-json.method args[:method]
+json.url url
+json.exception exception
+json.method method
 json.verifySsl verify_ssl
-json.requestHeaders args.fetch(:headers, {})
-json.responseHeaders args[:response].try(:headers)
+json.requestHeaders headers
+json.responseHeaders response_headers
 json.requestBody payload
-json.responseBody args[:response].try(:body).to_s.force_encoding('UTF-8')
+json.responseBody response_body
 json.sourceIp ip_address
 json.eventName RestClient::Jogger.response_pattern
 json.eventId event_id
+json.eventAgent RestClient::Jogger::AGENT_VERSION
 json.timeElapsed time_elapsed
 json.openTimeout open_timeout
 json.readTimeout read_timeout
-json.code args[:response].try(:code)
+json.code code
 json.timestamp timestamp.iso8601
