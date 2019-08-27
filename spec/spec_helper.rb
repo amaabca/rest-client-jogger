@@ -12,7 +12,8 @@ Dir[File.expand_path("../support/**/*.rb", __FILE__)].each { |f| require f }
 
 RSpec.configure do |config|
   WebMock.disable_net_connect!
+
   config.before(:all) do
-    FileUtils.mkdir_p 'log'
+    FileUtils.mkdir_p('log')
   end
 end
