@@ -1,13 +1,9 @@
 sudo: false
 language: ruby
 rvm:
-  - 2.2.0
-  - 2.2.1
-  - 2.2.2
-  - 2.2.3
-  - 2.3.0
   - 2.5.1
   - 2.6.3
+  - 2.7.1
 before_install: gem install bundler -v '1.17.3'
 install: bundle _1.17.3_ install
 script: bundle _1.17.3_ exec rake

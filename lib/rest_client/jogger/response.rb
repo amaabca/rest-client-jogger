@@ -14,7 +14,7 @@ module RestClient
 
       def response_params(opts = {})
         response_headers = opts[:response].try(:headers) || {}
-        response_body = opts[:response].try(:body).to_s.force_encoding('UTF-8')
+        response_body = opts[:response].try(:body).to_s.dup.force_encoding('UTF-8')
         {
           exception: opts[:exception],
           response_headers: filtered_headers(response_headers),
