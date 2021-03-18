@@ -51,7 +51,8 @@ module RestClient
       end
 
       def filter_class(headers = {})
-        content_type = headers.fetch(:content_type) { 'application/json' }
+        normalized_headers = headers.transform_keys { |k| k.to_s.downcase.tr('-', '_') }
+        content_type = normalized_headers.fetch('content_type') { 'application/json' }
         RestClient::Jogger::Filters::Base.filter_class(content_type)
       end
 
